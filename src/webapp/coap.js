@@ -29,12 +29,15 @@ CoapRequest.prototype.setRequestHeader = function () {
 CoapRequest.prototype.abort = function () {
 
 };
+CoapRequest.prototype.getAllResponseHeaders = function () {
+
+};
 
 CoapRequest.prototype.send = function (payload) {
     this.payload = payload;
     var self = this;
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8080/request', this.async);
+    xhr.open('POST', window.coap_proxy + '/request', this.async);
     xhr.setRequestHeader('Content-Type', 'application/json');
     var jsondata = JSON.stringify({
         'method': this.method,
@@ -47,14 +50,23 @@ CoapRequest.prototype.send = function (payload) {
     };
     function processResponse() {
         var o = JSON.parse(xhr.responseText);
-        self.status = o.code;
-        self.code = o.code;
-        self.responseText = o.payload;
+        if ('error' in o){
+            self.error = o.error;
+        }else {
+            self.error = null;
+            self.status = 200;
+            self.code = o.code;
+            self.responseText = o.payload;
+        }
     }
 
     xhr.onload = function () {
         processResponse();
-        self.onload();
+        if(self.error) {
+            self.onerror();
+        } else {
+            self.onload();
+        }
     };
     xhr.onerror = function () {
         self.onerror();

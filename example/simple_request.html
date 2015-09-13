@@ -9,10 +9,15 @@
 
 <script src="http://localhost:8080/coap.js" type="application/javascript"></script>
 <script type="application/javascript">
+    window.coap_proxy = 'http://localhost:8080';
+    function encode(r){
+        return r.replace(/[\x26\x0A\<>'"]/g,function(r){return"&#"+r.charCodeAt(0)+";"})
+    }
+
     var request = new CoapRequest();
-    request.open('GET', 'coap://localhost:5683', true);
+    request.open('GET', 'coap://localhost:5683/apps/instances', true);
     request.onload = function () {
-        document.write("<pre>"+request.responseText+"</pre>");
+        document.write("<pre>"+encode(request.responseText)+"</pre>");
     };
     request.send();
 </script>

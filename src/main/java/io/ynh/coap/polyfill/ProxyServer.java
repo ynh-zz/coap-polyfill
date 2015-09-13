@@ -1,14 +1,8 @@
 package io.ynh.coap.polyfill;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.ServerContainer;
-
+import com.google.gson.Gson;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
-import com.google.gson.Gson;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -17,6 +11,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.ServerContainer;
 import java.io.IOException;
 
 public class ProxyServer
@@ -88,7 +87,7 @@ public class ProxyServer
 			RequestDefinition requestDefintion = gson.fromJson(req.getReader().readLine(), RequestDefinition.class);
 
 			CoapClient client = new CoapClient(requestDefintion.url);
-
+			client.setTimeout(1000);
 			CoapResponse response = null;
 			if (requestDefintion.method.equals("GET")){
 				response = client.get();
@@ -101,6 +100,8 @@ public class ProxyServer
 			}
 			if(response != null) {
 				resp.getWriter().println(gson.toJson(new ResponseDefinition(response.getCode().value, response.getResponseText())));
+			} else {
+				resp.getWriter().println(gson.toJson(new ErrorDefinition("timeout")));
 			}
 		}
 	}
