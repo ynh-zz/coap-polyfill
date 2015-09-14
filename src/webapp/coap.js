@@ -1,4 +1,6 @@
-function CoapRequest(type) {
+window.coap_proxy = 'http://localhost:8080';
+
+function CoAPRequest(type) {
     this.method = 'GET';
     this.uri = null;
     this.async = true;
@@ -16,24 +18,24 @@ function CoapRequest(type) {
 
 }
 
-CoapRequest.prototype.open = function (method, uri, async) {
+CoAPRequest.prototype.open = function (method, uri, async) {
     this.method = method;
     this.uri = uri;
     this.async = async;
 };
 
-CoapRequest.prototype.setRequestHeader = function () {
+CoAPRequest.prototype.setRequestHeader = function () {
 
 };
 
-CoapRequest.prototype.abort = function () {
+CoAPRequest.prototype.abort = function () {
 
 };
-CoapRequest.prototype.getAllResponseHeaders = function () {
+CoAPRequest.prototype.getAllResponseHeaders = function () {
 
 };
 
-CoapRequest.prototype.send = function (payload) {
+CoAPRequest.prototype.send = function (payload) {
     this.payload = payload;
     var self = this;
     var xhr = new XMLHttpRequest();
