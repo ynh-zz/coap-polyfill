@@ -19,6 +19,12 @@ Simple coap get request:
     };
     request.send();
 
+Coap requests can also be created using the jQuery API.
+
+    $.get("coap://localhost:5683", function( data ) {
+        alert(data);
+    });
+
 ## Security
 The current version of this pluign should only be used for development purposes. To simplify the exchange of web applications using CoAP requests, the proxy server accepts cross-origin requests. Thereby, enabling any website to create CoAP requests (if the proxy server is running on the clients machine). 
 
