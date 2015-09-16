@@ -1,4 +1,26 @@
 window.coap_proxy = 'http://localhost:8080';
+var status_map = {
+    64: 200,
+    65: 201,
+    66: 202,
+    67: 203,
+    68: 204,
+    69: 200,
+    128: 400,
+    129: 401,
+    130: 402,
+    131: 403,
+    132: 404,
+    133: 405,
+    141: 413,
+    143: 415,
+    160: 500,
+    161: 501,
+    162: 502,
+    163: 503,
+    164: 504,
+    165: 505
+};
 
 function CoAPRequest(type) {
     this.method = 'GET';
@@ -56,7 +78,7 @@ CoAPRequest.prototype.send = function (payload) {
             self.error = o.error;
         }else {
             self.error = null;
-            self.status = 200;
+            self.status = status_map[o.code] || 500;
             self.code = o.code;
             self.responseText = o.payload;
         }
