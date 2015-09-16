@@ -80,3 +80,15 @@ CoAPRequest.prototype.send = function (payload) {
 
 };
 
+function setup_jquery_coap_support(){
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        if (options.url.indexOf('coap://') === 0) {
+            options.xhr = function () {
+                return new CoAPRequest();
+            };
+        }
+    });
+}
+if (window.jQuery) {
+    setup_jquery_coap_support()
+}
