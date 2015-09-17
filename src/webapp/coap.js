@@ -1,25 +1,25 @@
 window.coap_proxy = 'http://localhost:8080';
 var status_map = {
-    64: 200,
-    65: 201,
-    66: 202,
-    67: 203,
-    68: 204,
-    69: 200,
-    128: 400,
-    129: 401,
-    130: 402,
-    131: 403,
-    132: 404,
-    133: 405,
-    141: 413,
-    143: 415,
-    160: 500,
-    161: 501,
-    162: 502,
-    163: 503,
-    164: 504,
-    165: 505
+    64: {status: 200, statusText: 'OK'},
+    65: {status: 201, statusText: 'Created'},
+    66: {status: 202, statusText: 'Deleted'},
+    67: {status: 203, statusText: 'Valid'},
+    68: {status: 204, statusText: 'Changed'},
+    69: {status: 205, statusText: 'Content'},
+    128: {status: 400, statusText: 'Bad Request'},
+    129: {status: 401, statusText: 'Unauthorized'},
+    130: {status: 402, statusText: 'Bad Option'},
+    131: {status: 403, statusText: 'Forbidden'},
+    132: {status: 404, statusText: 'Not Found'},
+    133: {status: 405, statusText: 'Method Not Allowed'},
+    141: {status: 413, statusText: 'Request Entity Too Large'},
+    143: {status: 415, statusText: 'Unsupported Content-Format'},
+    160: {status: 500, statusText: 'Internal Server Error'},
+    161: {status: 501, statusText: 'Not Implemented'},
+    162: {status: 502, statusText: 'Bad Gateway'},
+    163: {status: 503, statusText: 'Service Unavailable'},
+    164: {status: 504, statusText: 'Gateway Timeout'},
+    165: {status: 505, statusText: 'Proxying Not Supported'}
 };
 
 function CoAPRequest(type) {
@@ -78,7 +78,9 @@ CoAPRequest.prototype.send = function (payload) {
             self.error = o.error;
         }else {
             self.error = null;
-            self.status = status_map[o.code] || 500;
+            var status = (status_map[o.code] || {status: 500, statusText: 'Unkown Status ' + o.code});
+            self.status = status.status;
+            self.statusText = status.statusText;
             self.code = o.code;
             self.responseText = o.payload;
         }
