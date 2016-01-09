@@ -29,7 +29,7 @@ public class ProxyServer
 
 		// Setup the basic application "context" for this application at "/"
 		// This is also known as the handler tree (in jetty speak)
-		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
 		context.setContextPath("/");
 		server.setHandler(context);
 		context.addServlet(CoapRequestServlet.class, "/request");
@@ -48,7 +48,6 @@ public class ProxyServer
 
 			// Add WebSocket endpoint to javax.websocket layer
 			wscontainer.addEndpoint(ObserveSocket.class);
-
 			server.start();
 			server.dump(System.err);
 			server.join();
