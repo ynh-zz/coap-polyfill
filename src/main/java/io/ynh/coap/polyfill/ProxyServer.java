@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.ServerContainer;
 import java.io.IOException;
+import java.net.URL;
 
 public class ProxyServer
 {
@@ -36,7 +37,11 @@ public class ProxyServer
 
 		// add special pathspec of "/home/" content mapped to the homePath
 		ServletHolder holderHome = new ServletHolder("static-home", DefaultServlet.class);
-		holderHome.setInitParameter("resourceBase", "./src/webapp");
+		String  baseStr  = "/webapp";  //... contains: helloWorld.html, login.html, etc. and folder: other/xxx.html
+		URL baseUrl  = ProxyServer.class.getResource( baseStr );
+		String  basePath = baseUrl.toExternalForm();
+
+		holderHome.setInitParameter("resourceBase", basePath);
 		holderHome.setInitParameter("dirAllowed", "false");
 		holderHome.setInitParameter("pathInfoOnly", "true");
 		context.addServlet(holderHome, "/*");
